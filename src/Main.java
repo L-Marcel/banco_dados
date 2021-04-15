@@ -18,7 +18,7 @@ public class Main {
       EmpregadoDAO.adicionar(con, empregado);
       */
       
-      String[] atrs = { "cpf", "pnome", "unome", "salario" };
+      String[] atrs = {};
       Table table = EmpregadoDAO.selecionar(con, atrs, "");
 
       con.close();

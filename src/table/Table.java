@@ -83,7 +83,17 @@ public class Table {
     for (int x = 0; x <= rows.length - 1; x++) {
       for (int y = 0; y <= rows[x].length - 1; y++) {
         int max = getMaxLengthOfColumn(y);
+
         String format = "%-" + (max + 5) + "s";
+        int rlen = rows[x].length;
+        int newLen = getMaxLengthOfRow(5 * rlen);
+
+        if(getMaxLengthOfRow(5) < qtdOfLines &&  newLen >= qtdOfLines){
+          format = "%-" + (newLen/rlen) + "s";
+        }else if(newLen < qtdOfLines){
+          format = "%-" + (qtdOfLines/rlen) + "s";
+        }
+
         if (x == 0) {
           System.out.printf(format, "| " + rows[x][y]);
         } else {
