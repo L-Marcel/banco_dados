@@ -1,5 +1,6 @@
 package src.classesDAO;
 
+import java.io.Console;
 import java.sql.*;
 import java.util.Arrays;
 
@@ -20,7 +21,7 @@ public class EmpregadoDAO {
    statement.setString(1, empregado.getCpf());
    statement.setString(2, empregado.getPnome());
    statement.setString(3, empregado.getUnome());
-   statement.setString(4, empregado.getDataNasc().toString());
+   statement.setDate(4, Date.valueOf(empregado.getDataNasc().toString()));
    statement.setString(5, empregado.getEndereco());
    statement.setDouble(6, empregado.getSalario());
    statement.setString(7, empregado.getSexo());
@@ -39,8 +40,7 @@ public class EmpregadoDAO {
  public static Table selecionar(Connection con, String atrs[], String where) {
   String sql = "SELECT " + (Converter.arrayToString(atrs, ",", false)) + " FROM Empregado " + where;
 
-  String[] defaultAtrs = { "cpf", "pnome", "unome", "dataNasc", "endereco", "salario", "sexo", "numeroDep",
-    "cpfSupervisor" };
+  String[] defaultAtrs = { "cpf", "pnome", "unome", "data_nasc", "endereco", "salario", "sexo", "numero_dep", "cpf_supervisor" };
 
   String[][] rows = new String[0][0];
   Table table = new Table("Empregados Selecionados", "Empregado", atrs, rows);
@@ -51,12 +51,15 @@ public class EmpregadoDAO {
 
    while (response.next()) {
     String[] row = new String[0];
-    for (int x = 0; x < defaultAtrs.length - 1; x++) {
-     String value = "";
-     if (Arrays.stream(atrs).anyMatch(defaultAtrs[x]::equals)) {
-      value = Default.defaultValue("null", response.getString(defaultAtrs[x]));
-      row = Functions.addInArray(row, value);
-     }
+    for (int x = 0; x <= defaultAtrs.length - 1; x++) {
+      String value = "";
+      for(int y = 0; y <= atrs.length - 1; y++){
+        if(defaultAtrs[x].equals(atrs[y])){
+          value = Default.defaultValue("null", response.getString(defaultAtrs[x]));
+          System.out.println(atrs[y] + "/" + defaultAtrs[x] + ":" + value + "=" + response.getString(defaultAtrs[x]));
+          row = Functions.addInArray(row, value);
+        }
+      }
     }
     table.addRow(row);
    }

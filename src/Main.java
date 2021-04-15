@@ -12,12 +12,13 @@ public class Main {
       Connection con = new ConnectionFactory().getConnection();
       ConnectionFactory.selectDatabase(con);
 
-      /* Empregado empregado = new Empregado("000.111.222-36", "Lucas", "Marcel",
+      /*Empregado empregado = new Empregado("000.111.222-50", "Lucas", "Marcel",
       "2002-10-02", "Macau - RN", 1500.00, "m", 1);
-      System.out.print(empregado.toString() + "\n\n"); Empregados.adicionar(con,
-      empregado);*/
-
-      String[] atrs = { "cpf", "pnome", "unome", "salario", "sexo", "endereco" };
+      System.out.print(empregado.toString() + "\n\n"); 
+      EmpregadoDAO.adicionar(con, empregado);
+      */
+      
+      String[] atrs = { "cpf","pnome", "endereco", "sexo", "cpf_supervisor" };
       Table table = EmpregadoDAO.selecionar(con, atrs, "WHERE salario > 2000");
 
       con.close();
