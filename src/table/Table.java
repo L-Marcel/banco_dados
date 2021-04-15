@@ -1,28 +1,23 @@
 package src.table;
 
-import src.util.Converter;
 import src.util.Functions;
 import src.util.Render;
 
 public class Table {
-  String title = "";
-  String nameOfItem = "";
-  String[] columns = null;
-  String[][] rows = null;
+  private String title = "";
+  private String[] columns = null;
+  private String[][] rows = null;
 
   /**
    * Cria uma tabela
    * 
-   * @param title      - o título da tabela
-   * @param nameOfItem - o nome dado a cada item
-   * @param columns    - um String[] contendo cada coluna
-   * @param rows       - um String[][] contendo todas as linhas iniciais
+   * @param title   - o título da tabela
+   * @param columns - um String[] contendo cada coluna
+   * @param rows    - um String[][] contendo todas as linhas iniciais
    */
-  public Table(String title, String nameOfItem, String[] columns, String[][] rows) {
+  public Table(String title, String[] columns, String[][] rows) {
     this.title = title;
-    this.nameOfItem = nameOfItem;
     this.columns = columns;
-
     this.rows = Functions.addInArray(rows, this.columns);
   }
 
@@ -37,31 +32,72 @@ public class Table {
     }
   }
 
-  @Override
-  public String toString() {
-    int qtdOfLines = (0 + ": " + this.nameOfItem + "(" + Converter.arrayToString(rows[0], ",", false) + ");\n").length()
-        + 10;
+  /**
+   * Retornar o tamanho do maior item contido na coluna
+   * 
+   * @param indexOfColumn - o index da coluna
+   * @return um inteiro
+   */
+  public int getMaxLengthOfColumn(int indexOfColumn) {
+    int max = 10;
+
+    for (int x = 0; x <= rows.length - 1; x++) {
+      int len = rows[x][indexOfColumn].length();
+      if (len > max) {
+        max = len;
+      }
+    }
+
+    return max;
+  }
+
+  /**
+   * Retornar o tamanho máximo de todas as linhas da tabela
+   * 
+   * @param add - o valor que será adicionado ao tamanho máximo
+   * @return um inteiro
+   */
+  public int getMaxLengthOfRow(int add) {
+    int max = 0;
+
+    for (int x = 0; x <= rows[0].length - 1; x++) {
+      max += getMaxLengthOfColumn(x) + add;
+    }
+
+    return max;
+  }
+
+  /**
+   * Renderiza a tabela
+   */
+  public void renderTable() {
+    int qtdOfLines = getMaxLengthOfRow(5);
     int defaultQtdOfLines = 40;
 
     if (qtdOfLines < defaultQtdOfLines) {
       qtdOfLines = defaultQtdOfLines;
     }
 
-    if (rows.length > 1) {
-      qtdOfLines = (1 + ": " + this.nameOfItem + "(" + Converter.arrayToString(rows[1], ",", false) + ");\n").length()
-          + 10;
-    }
-
-    String str = Render.renderLine(this.title, qtdOfLines) + "\n";
+    System.out.println("\n|" + Render.renderLine("[ " + this.title + " ]", qtdOfLines - 1) + "|");
 
     for (int x = 0; x <= rows.length - 1; x++) {
-      if (x == 0 || x == rows.length - 1) {
-        str += x + ": " + this.nameOfItem + "(" + Converter.arrayToString(rows[x], ",", false) + ");\n"
-            + Render.renderLine(qtdOfLines) + "\n";
+      for (int y = 0; y <= rows[x].length - 1; y++) {
+        int max = getMaxLengthOfColumn(y);
+        String format = "%-" + (max + 5) + "s";
+        if (x == 0) {
+          System.out.printf(format, "| " + rows[x][y]);
+        } else {
+          System.out.printf(format, "| " + rows[x][y]);
+        }
+      }
+
+      if (x == 0) {
+        System.out.println("|\n|" + Render.renderLine("[ Itens: " + (rows.length - 1) + " ]", qtdOfLines - 1) + "|");
       } else {
-        str += x + ": " + this.nameOfItem + "(" + Converter.arrayToString(rows[x], ",", false) + ");\n";
+        System.out.println("|");
       }
     }
-    return str;
+
+    System.out.println("|" + Render.renderLine(qtdOfLines - 1) + "|");
   }
 }

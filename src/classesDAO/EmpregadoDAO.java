@@ -11,67 +11,86 @@ import src.util.Functions;
 import src.table.Table;
 
 public class EmpregadoDAO {
- public static void adicionar(Connection con, Empregado empregado) {
-  String sql = "INSERT INTO Empregado " + "(cpf,pnome,unome,data_nasc,endereco,salario,sexo,numero_dep,cpf_supervisor) "
-    + "VALUES (?,?,?,?,?,?,?,?,?)";
+  /**
+   * Adiciona um empregado no banco de dados
+   * 
+   * @param con       - a conexão com o banco de dados
+   * @param empregado - o empregado a ser adicionado
+   */
+  public static void adicionar(Connection con, Empregado empregado) {
+    String sql = "INSERT INTO Empregado "
+        + "(cpf,pnome,unome,data_nasc,endereco,salario,sexo,numero_dep,cpf_supervisor) " + "VALUES (?,?,?,?,?,?,?,?,?)";
 
-  try {
-   PreparedStatement statement = con.prepareStatement(sql);
+    try {
+      PreparedStatement statement = con.prepareStatement(sql);
 
-   statement.setString(1, empregado.getCpf());
-   statement.setString(2, empregado.getPnome());
-   statement.setString(3, empregado.getUnome());
-   statement.setDate(4, Date.valueOf(empregado.getDataNasc().toString()));
-   statement.setString(5, empregado.getEndereco());
-   statement.setDouble(6, empregado.getSalario());
-   statement.setString(7, empregado.getSexo());
-   statement.setString(8, Integer.toString(empregado.getNumeroDep()));
-   statement.setString(9, empregado.getCpfSupervisor());
+      statement.setString(1, empregado.getCpf());
+      statement.setString(2, empregado.getPnome());
+      statement.setString(3, empregado.getUnome());
+      statement.setDate(4, Date.valueOf(empregado.getDataNasc().toString()));
+      statement.setString(5, empregado.getEndereco());
+      statement.setDouble(6, empregado.getSalario());
+      statement.setString(7, empregado.getSexo());
+      statement.setString(8, Integer.toString(empregado.getNumeroDep()));
+      statement.setString(9, empregado.getCpfSupervisor());
 
-   statement.execute();
-   statement.close();
+      statement.execute();
+      statement.close();
 
-   System.out.print(empregado.toString("Criado"));
-  } catch (Exception e) {
-   System.out.print(e);
-  }
- };
-
- public static Table selecionar(Connection con, String atrs[], String where) {
-  String sql = "SELECT " + (Converter.arrayToString(atrs, ",", false)) + " FROM Empregado " + where;
-
-  String[] defaultAtrs = { "cpf", "pnome", "unome", "data_nasc", "endereco", "salario", "sexo", "numero_dep", "cpf_supervisor" };
-
-  String[][] rows = new String[0][0];
-  Table table = new Table("Empregados Selecionados", "Empregado", atrs, rows);
-
-  try {
-   PreparedStatement statement = con.prepareStatement(sql);
-   ResultSet response = statement.executeQuery();
-
-   while (response.next()) {
-    String[] row = new String[0];
-    for (int x = 0; x <= defaultAtrs.length - 1; x++) {
-      String value = "";
-      for(int y = 0; y <= atrs.length - 1; y++){
-        if(defaultAtrs[x].equals(atrs[y])){
-          value = Default.defaultValue("null", response.getString(defaultAtrs[x]));
-          System.out.println(atrs[y] + "/" + defaultAtrs[x] + ":" + value + "=" + response.getString(defaultAtrs[x]));
-          row = Functions.addInArray(row, value);
-        }
-      }
+      System.out.print(empregado.toString("Criado"));
+    } catch (Exception e) {
+      System.out.print(e);
     }
-    table.addRow(row);
-   }
+  };
 
-   response.close();
-   statement.close();
+  /**
+   * Seleciona um conjunto de empregados do banco de dados
+   * 
+   * @param con   - a conexão com o banco de dados
+   * @param atrs  - um array do tipo String[] com os atributos que devem ser
+   *              coletados (se não conter nenhum item, todos os atributos serão
+   *              coletados)
+   * @param where - uma String com o filtro utilizado para selecionar os
+   *              empregados (se for uma String vazia, retornará todos os
+   *              empregados)
+   */
+  public static Table selecionar(Connection con, String atrs[], String where) {
+    String[] defaultAtrs = { "cpf", "pnome", "unome", "data_nasc", "endereco", "salario", "sexo", "numero_dep",
+        "cpf_supervisor" };
 
-   System.out.print(table.toString());
-   return table;
-  } catch (SQLException e) {
-   throw new RuntimeException(e);
-  }
- };
+    if (atrs.length == 0) {
+      atrs = defaultAtrs;
+    }
+
+    String sql = "SELECT " + (Converter.arrayToString(atrs, ",", false)) + " FROM Empregado " + where;
+    String[][] rows = new String[0][0];
+    Table table = new Table("Empregados Selecionados", atrs, rows);
+
+    try {
+      PreparedStatement statement = con.prepareStatement(sql);
+      ResultSet response = statement.executeQuery();
+
+      while (response.next()) {
+        String[] row = new String[0];
+        for (int x = 0; x <= defaultAtrs.length - 1; x++) {
+          String value = "";
+          for (int y = 0; y <= atrs.length - 1; y++) {
+            if (defaultAtrs[x].equals(atrs[y])) {
+              value = Default.defaultValue("null", response.getString(defaultAtrs[x]));
+              row = Functions.addInArray(row, value);
+            }
+          }
+        }
+        table.addRow(row);
+      }
+
+      response.close();
+      statement.close();
+
+      table.renderTable();
+      return table;
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  };
 };
-

@@ -18,8 +18,8 @@ public class Main {
       EmpregadoDAO.adicionar(con, empregado);
       */
       
-      String[] atrs = { "cpf","pnome", "endereco", "sexo", "cpf_supervisor" };
-      Table table = EmpregadoDAO.selecionar(con, atrs, "WHERE salario > 2000");
+      String[] atrs = { "cpf", "pnome", "unome", "salario" };
+      Table table = EmpregadoDAO.selecionar(con, atrs, "");
 
       con.close();
     } catch (Exception e) {
