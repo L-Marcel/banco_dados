@@ -1,7 +1,7 @@
-package src.table;
+package table;
 
-import src.util.Functions;
-import src.util.Render;
+import util.Functions;
+import util.Render;
 
 public class Table {
   private String title = "";

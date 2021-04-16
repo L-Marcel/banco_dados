@@ -1,8 +1,6 @@
-package src;
-
-import src.classesDAO.EmpregadoDAO;
-import src.connections.*;
-import src.table.Table;
+import classesDAO.EmpregadoDAO;
+import connections.*;
+import table.Table;
 
 import java.sql.*;
 

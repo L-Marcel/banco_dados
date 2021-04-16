@@ -1,4 +1,4 @@
-package src.connections;
+package connections;
 
 public class Credentials {
  private static final String user = "5fMzvWRdbK";

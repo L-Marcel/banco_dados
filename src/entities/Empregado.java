@@ -1,8 +1,7 @@
-package src;
-
+package entities;
 import java.text.DecimalFormat;
 import java.sql.*;
-import src.util.*;
+import util.*;
 
 public class Empregado {
   long cpf = 0;

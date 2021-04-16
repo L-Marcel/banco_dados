@@ -1,14 +1,14 @@
-package src.classesDAO;
+package classesDAO;
 
 import java.io.Console;
 import java.sql.*;
 import java.util.Arrays;
 
-import src.Empregado;
-import src.util.Converter;
-import src.util.Default;
-import src.util.Functions;
-import src.table.Table;
+import entities.Empregado;
+import util.Converter;
+import util.Default;
+import util.Functions;
+import table.Table;
 
 //Adicionar, remover, atualizar, selecionar
 public class EmpregadoDAO {
@@ -54,8 +54,6 @@ public class EmpregadoDAO {
 
       statement.execute();
       statement.close();
-
-      System.out.print(empregado.toString("Criado"));
     } catch (Exception e) {
       System.out.print(e);
     }
@@ -113,15 +111,11 @@ public class EmpregadoDAO {
   };
 
   /**
-   * Seleciona um conjunto de empregados do banco de dados
+   * Seleciona um único empregado do banco de dados
    * 
    * @param con   - a conexão com o banco de dados
-   * @param atrs  - um array do tipo String[] com os atributos que devem ser
-   *              coletados (se não conter nenhum item, todos os atributos serão
-   *              coletados)
-   * @param where - uma String com o filtro utilizado para selecionar os
-   *              empregados (se for uma String vazia, retornará todos os
-   *              empregados)
+   * @param atrs  - uma String contendo o cpf
+   * @return o empregado
    */
   public static Empregado selecionar(Connection con, String cpf) {
     String sql = "SELECT * FROM Empregado WHERE cpf=?";
@@ -133,7 +127,7 @@ public class EmpregadoDAO {
       ResultSet response = statement.executeQuery();
 
       String _cpf = response.getString("cpf");
-      String pnome = reponse.getString("pnome"); 
+      String pnome = response.getString("pnome"); 
       String unome = response.getString("unome"); 
       String dataNasc = response.getDate("data_nasc").toString(); 
       String endereco = response.getString("endereco"); 
