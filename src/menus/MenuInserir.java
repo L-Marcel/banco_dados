@@ -11,7 +11,7 @@ public class MenuInserir {
     public void menuInserir(Scanner input, Connection con) {
         System.out.println("Por favor, escolha de acordo com o número a tabela que deseja inserir dados:");
         System.out.println("[0] - Voltar ao menu pricipal\n[1] - Empregado\n[2] - Departamento");
-        int opcaoEscolhida = input.nextInt();
+        int opcaoEscolhida = Integer.parseInt(input.nextLine());
         traco();
 
         if (opcaoEscolhida == 0) {
