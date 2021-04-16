@@ -2,11 +2,12 @@ package daos;
 
 import java.sql.*;
 
-import entities.Departamento;
 import util.Converter;
 import util.Default;
 import util.Functions;
 import table.Table;
+
+import entities.Departamento;
 
 public class DepartamentoDAO {
      
@@ -30,4 +31,27 @@ public class DepartamentoDAO {
           System.out.print(e);
         }
       };
+      public static Departamento remover(Connection con, int numero) {
+        String sql = "DELETE FROM Departamento WHERE numero=?";
+        Departamento departamento = selecionar(con, numero);
+    
+        if (departamento.getNumero() {
+          throw new RuntimeException("Departamento não existe!");
+        }
+    
+        try {
+          PreparedStatement statement = con.prepareStatement(sql);
+    
+          statement.setInt(1, numero);
+    
+          statement.execute();
+          statement.close();
+    
+          System.out.println(departamento.toString("Deletado"));
+    
+          return departamento;
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      }      
 }
