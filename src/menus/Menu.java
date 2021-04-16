@@ -2,7 +2,9 @@ package menus;
 
 import java.sql.Connection;
 import java.util.Scanner;
-import menus.MenuInserir;
+
+import util.Render;
+
 
 public class Menu {
 
@@ -13,31 +15,31 @@ public class Menu {
         boolean continuar = true;
         System.out.println("Olá! Seja bem vindo!");
         while (continuar) {
-            System.out.println(
-                    "Por gentileza, informe o número da opção desejada:\n[0] - Sair\n[1] - Visualizar uma tabela\n[2] - Inserir novos dados\n[3] - Excluir dados existentes");
-            int opcaoEscolhida = input.nextInt();
-            traco();
+            System.out.println("Por gentileza, informe o número da opção desejada:\n[0] - Sair\n[1] - Visualizar uma tabela\n[2] - Inserir novos dados\n[3] - Excluir dados existentes");
+            int opcaoEscolhida = Integer.parseInt(input.nextLine());
+            System.out.println(Render.renderLine());
+         
 
             if (opcaoEscolhida == 0) {
               
                 continuar = sair(input);
-                traco();
+                System.out.println(Render.renderLine());
 
-            }else if(opcaoEscolhida == 2){
+            }if(opcaoEscolhida == 2){
                 mInserir.menuInserir(input, con);
                 
-            }else if(opcaoEscolhida == 3){
+            } if(opcaoEscolhida == 3){
 
             }else{
                 System.out.println("Descupe, não conseguimos entender o que você deseja, tente novamente!");
-                traco();
+                System.out.println(Render.renderLine());
             }
         }
     }
     public boolean sair(Scanner input){
 
         System.out.println("Tem certeza que deseja sair? Digite o número com a opção desejada:\n[0] - Desejo sair\n[1] - Desejo voltar");
-        int opcaoEscolhida = input.nextInt();
+        int opcaoEscolhida = Integer.parseInt(input.nextLine());
 
         if (opcaoEscolhida == 0){
             System.out.println("Esperamos você de volta em breve!");
@@ -48,10 +50,5 @@ public class Menu {
     }
     
     
-
-    public void traco(){
-        System.out.println("---------------------------------------");
-    }
 }
-
      
