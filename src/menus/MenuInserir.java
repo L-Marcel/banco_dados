@@ -9,6 +9,7 @@ import entities.Empregado;
 public class MenuInserir {
 
     public void menuInserir(Scanner input, Connection con) {
+        input.nextLine();
         System.out.println("Por favor, escolha de acordo com o número a tabela que deseja inserir dados:");
         System.out.println("[0] - Voltar ao menu pricipal\n[1] - Empregado\n[2] - Departamento");
         int opcaoEscolhida = Integer.parseInt(input.nextLine());
@@ -37,7 +38,6 @@ public class MenuInserir {
     }
 
     public void inserirEmpregado(Scanner input, Connection con) {
-
         System.out.println("Informe o CPF do empregado: ");
         String cpfEmpre = input.nextLine();
 
