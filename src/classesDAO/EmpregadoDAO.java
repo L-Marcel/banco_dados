@@ -10,6 +10,7 @@ import src.util.Default;
 import src.util.Functions;
 import src.table.Table;
 
+//Adicionar, remover, atualizar, selecionar
 public class EmpregadoDAO {
   /**
    * Adiciona um empregado no banco de dados
@@ -43,6 +44,22 @@ public class EmpregadoDAO {
     }
   };
 
+  public static void remover(Connection con, String cpf){
+    String sql = "DELETE FROM Empregado WHERE cpf=?";
+
+    try {
+      PreparedStatement statement = con.prepareStatement(sql);
+
+      statement.setString(1, cpf);
+
+      statement.execute();
+      statement.close();
+
+      System.out.print(empregado.toString("Criado"));
+    } catch (Exception e) {
+      System.out.print(e);
+    }
+  }
   /**
    * Seleciona um conjunto de empregados do banco de dados
    * 
@@ -53,6 +70,7 @@ public class EmpregadoDAO {
    * @param where - uma String com o filtro utilizado para selecionar os
    *              empregados (se for uma String vazia, retornará todos os
    *              empregados)
+   * @return uma tabela
    */
   public static Table selecionar(Connection con, String atrs[], String where) {
     String[] defaultAtrs = { "cpf", "pnome", "unome", "data_nasc", "endereco", "salario", "sexo", "numero_dep",
@@ -89,6 +107,45 @@ public class EmpregadoDAO {
 
       table.renderTable();
       return table;
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  };
+
+  /**
+   * Seleciona um conjunto de empregados do banco de dados
+   * 
+   * @param con   - a conexão com o banco de dados
+   * @param atrs  - um array do tipo String[] com os atributos que devem ser
+   *              coletados (se não conter nenhum item, todos os atributos serão
+   *              coletados)
+   * @param where - uma String com o filtro utilizado para selecionar os
+   *              empregados (se for uma String vazia, retornará todos os
+   *              empregados)
+   */
+  public static Empregado selecionar(Connection con, String cpf) {
+    String sql = "SELECT * FROM Empregado WHERE cpf=?";
+
+    try {
+      PreparedStatement statement = con.prepareStatement(sql);
+      statement.setString(1, cpf);
+
+      ResultSet response = statement.executeQuery();
+
+      String _cpf = response.getString("cpf");
+      String pnome = reponse.getString("pnome"); 
+      String unome = response.getString("unome"); 
+      String dataNasc = response.getDate("data_nasc").toString(); 
+      String endereco = response.getString("endereco"); 
+      Double salario = response.getDouble("salario");
+      String sexo = response.getString("sexo");
+      int numeroDep = response.getInt("numero_dep");
+      String cpfSupervisor = response.getString("cpf_supervisor");
+      Empregado empregado = new Empregado(_cpf, pnome, unome, dataNasc, endereco, salario, sexo, numeroDep, cpfSupervisor);
+      
+      response.close();
+      statement.close();
+      return empregado;
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }

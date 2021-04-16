@@ -11,7 +11,6 @@ public class Main {
     try {
       Connection con = new ConnectionFactory().getConnection();
       ConnectionFactory.selectDatabase(con);
-
       /*Empregado empregado = new Empregado("000.111.222-50", "Lucas", "Marcel",
       "2002-10-02", "Macau - RN", 1500.00, "m", 1);
       System.out.print(empregado.toString() + "\n\n"); 
@@ -20,7 +19,6 @@ public class Main {
       
       String[] atrs = {};
       Table table = EmpregadoDAO.selecionar(con, atrs, "");
-
       con.close();
     } catch (Exception e) {
       System.out.print(e);
