@@ -1,4 +1,5 @@
 package entities;
+
 import java.text.DecimalFormat;
 import java.sql.*;
 import util.*;
@@ -13,6 +14,8 @@ public class Empregado {
   String sexo = "";
   int numeroDep = -1;
   String cpfSupervisor = null;
+
+  public Empregado() {}
 
   public Empregado(String cpf, String pnome, String unome, String dataNasc, String endereco, Double salario,
       String sexo, int numeroDep, String cpfSupervisor) {
@@ -45,6 +48,10 @@ public class Empregado {
 
   public void setCpf(long cpf) {
     this.cpf = cpf;
+  }
+
+  public void setCpf(String cpf) {
+    this.cpf = Converter.cpfStringToLong(cpf);
   }
 
   public String getPnome() {

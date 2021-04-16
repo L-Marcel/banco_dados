@@ -108,6 +108,6 @@ public class Table {
       }
     }
 
-    System.out.println("|" + Render.renderLine(qtdOfLines - 1) + "|");
+    System.out.println("|" + Render.renderLine(qtdOfLines - 1) + "|\n\n");
   }
 }

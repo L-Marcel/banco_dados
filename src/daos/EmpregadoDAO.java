@@ -1,8 +1,6 @@
-package classesDAO;
+package daos;
 
-import java.io.Console;
 import java.sql.*;
-import java.util.Arrays;
 
 import entities.Empregado;
 import util.Converter;
@@ -20,7 +18,7 @@ public class EmpregadoDAO {
    */
   public static void adicionar(Connection con, Empregado empregado) {
     String sql = "INSERT INTO Empregado "
-        + "(cpf,pnome,unome,data_nasc,endereco,salario,sexo,numero_dep,cpf_supervisor) " + "VALUES (?,?,?,?,?,?,?,?,?)";
+        + "(cpf,pnome,unome,data_nasc,endereco,salario,sexo,numero_dep,cpf_supervisor) VALUES (?,?,?,?,?,?,?,?,?)";
 
     try {
       PreparedStatement statement = con.prepareStatement(sql);
@@ -38,14 +36,26 @@ public class EmpregadoDAO {
       statement.execute();
       statement.close();
 
-      System.out.print(empregado.toString("Criado"));
+      System.out.println(empregado.toString("Criado"));
     } catch (Exception e) {
       System.out.print(e);
     }
   };
 
-  public static void remover(Connection con, String cpf){
+  /**
+   * Deleta um único empregado do banco de dados
+   * 
+   * @param con - a conexão com o banco de dados
+   * @param cpf - uma String contendo o cpf
+   * @return o empregado deletado
+   */
+  public static Empregado remover(Connection con, String cpf) {
     String sql = "DELETE FROM Empregado WHERE cpf=?";
+    Empregado empregado = selecionar(con, cpf);
+
+    if (empregado.getCpf().equals("00000000000")) {
+      throw new RuntimeException("Empregado não existe!!!");
+    }
 
     try {
       PreparedStatement statement = con.prepareStatement(sql);
@@ -54,10 +64,62 @@ public class EmpregadoDAO {
 
       statement.execute();
       statement.close();
+
+      System.out.println(empregado.toString("Deletado"));
+
+      return empregado;
     } catch (Exception e) {
-      System.out.print(e);
+      throw new RuntimeException(e);
     }
   }
+
+  /**
+   * Atualiza um único empregado do banco de dados
+   * 
+   * @param con          - a conexão com o banco de dados
+   * @param cpf          - uma String contendo o cpf do antigo empregado
+   * @param newEmpregado - o Empregado que será colocando do antigo Empregado
+   * @return o empregado deletado
+   */
+  public static Empregado atualizar(Connection con, String cpf, Empregado newEmpregado) {
+    String sql = "UPDATE Empregado SET cpf=?, pnome=?, unome=?, data_nasc=?, endereco=?, salario=?, "
+    + "sexo=?, numero_dep=?, cpf_supervisor=? WHERE cpf=?";
+
+    Empregado empregado = selecionar(con, cpf);
+
+    if (empregado.getCpf().equals("00000000000")) {
+      throw new RuntimeException("Empregado não existe!!!");
+    }
+
+    try {
+      PreparedStatement statement = con.prepareStatement(sql);
+
+      statement.setString(1, newEmpregado.getCpf());
+      statement.setString(2, newEmpregado.getPnome());
+      statement.setString(3, newEmpregado.getUnome());
+      statement.setDate(4, Date.valueOf(newEmpregado.getDataNasc().toString()));
+      statement.setString(5, newEmpregado.getEndereco());
+      statement.setDouble(6, newEmpregado.getSalario());
+      statement.setString(7, newEmpregado.getSexo());
+      statement.setString(8, Integer.toString(newEmpregado.getNumeroDep()));
+      statement.setString(9, newEmpregado.getCpfSupervisor());
+
+      statement.setString(10, cpf);
+
+      statement.executeUpdate();
+      statement.close();
+
+      Empregado empregadoRes = selecionar(con, newEmpregado.getCpf());
+
+      System.out.println(empregado.toString("Antigo"));
+      System.out.println(empregadoRes.toString("Atualizado"));
+
+      return empregado;
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   /**
    * Seleciona um conjunto de empregados do banco de dados
    * 
@@ -113,8 +175,8 @@ public class EmpregadoDAO {
   /**
    * Seleciona um único empregado do banco de dados
    * 
-   * @param con   - a conexão com o banco de dados
-   * @param atrs  - uma String contendo o cpf
+   * @param con - a conexão com o banco de dados
+   * @param cpf - uma String contendo o cpf
    * @return o empregado
    */
   public static Empregado selecionar(Connection con, String cpf) {
@@ -126,19 +188,23 @@ public class EmpregadoDAO {
 
       ResultSet response = statement.executeQuery();
 
-      String _cpf = response.getString("cpf");
-      String pnome = response.getString("pnome"); 
-      String unome = response.getString("unome"); 
-      String dataNasc = response.getDate("data_nasc").toString(); 
-      String endereco = response.getString("endereco"); 
-      Double salario = response.getDouble("salario");
-      String sexo = response.getString("sexo");
-      int numeroDep = response.getInt("numero_dep");
-      String cpfSupervisor = response.getString("cpf_supervisor");
-      Empregado empregado = new Empregado(_cpf, pnome, unome, dataNasc, endereco, salario, sexo, numeroDep, cpfSupervisor);
-      
+      Empregado empregado = new Empregado();
+
+      while (response.next()) {
+        empregado.setCpf(response.getLong("cpf"));
+        empregado.setPnome(response.getString("pnome"));
+        empregado.setUnome(response.getString("unome"));
+        empregado.setDataNasc(response.getDate("data_nasc"));
+        empregado.setEndereco(response.getString("endereco"));
+        empregado.setSalario(response.getDouble("salario"));
+        empregado.setSexo(response.getString("sexo"));
+        empregado.setNumeroDep(response.getInt("numero_dep"));
+        empregado.setCpfSupervisor(response.getString("cpf_supervisor"));
+      }
+
       response.close();
       statement.close();
+
       return empregado;
     } catch (SQLException e) {
       throw new RuntimeException(e);
