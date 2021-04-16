@@ -3,20 +3,29 @@ package main;
 import connections.*;
 import daos.EmpregadoDAO;
 import entities.Empregado;
+import menus.Menu;
 
 import java.sql.*;
+import java.util.Scanner;
 
 public class Main {
   public static void main(String[] args) {
     try {
       Connection con = new ConnectionFactory().getConnection();
       ConnectionFactory.selectDatabase(con);
+      
+      Scanner input = new Scanner(System.in);
+
+      Menu  inicializacao = new Menu();
+      inicializacao.menu(input, con);
+      
+
 
       //Cria um empregado chamado Lucas Brito
       Empregado empregado = new Empregado("000.111.222-80", "Lucas", "Brito",
       "2002-10-02", "Macau - RN", 1800.00, "m", 1);
 
-      
+     
       //Adiciona Lucas
       EmpregadoDAO.adicionar(con, empregado);
 
