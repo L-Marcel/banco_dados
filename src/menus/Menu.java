@@ -10,6 +10,7 @@ public class Menu {
 
 
     MenuInserir mInserir = new MenuInserir();
+    MenuVisualizar mVisualizar = new MenuVisualizar();
 
     public void menu(Scanner input, Connection con) {
         boolean continuar = true;
@@ -25,6 +26,10 @@ public class Menu {
                 continuar = sair(input);
                 System.out.println(Render.renderLine());
 
+            }if(opcaoEscolhida == 1 ){
+                mVisualizar.menuVisualizar(input, con);
+
+            
             }if(opcaoEscolhida == 2){
                 mInserir.menuInserir(input, con);
                 

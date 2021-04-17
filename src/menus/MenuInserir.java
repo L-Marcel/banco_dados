@@ -1,6 +1,6 @@
 package menus;
 
-import java.sql.Connection;
+import java.sql.*;
 import java.util.Scanner;
 
 import daos.DepartamentoDAO;
@@ -138,15 +138,13 @@ public class MenuInserir {
         int confirmacao = Integer.parseInt(input.nextLine());
 
         if (confirmacao == 0) {
-
             try {
 
                 Departamento dep = new Departamento(numDep, nome, cpfGerente, dataInicio);
                 DepartamentoDAO.adicionar(con, dep);
 
-            } catch (Exception e) {
-                System.out.println("Não foi possivel inserir departamento.");
-                System.out.println(e.getMessage());
+            } catch (Exception ex) {
+                System.out.println("Não foi possivel inserir departamento.\n" + ex.getMessage());
 
             }
         }
