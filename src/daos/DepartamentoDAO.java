@@ -95,12 +95,11 @@ public class DepartamentoDAO {
           throw new RuntimeException(e);
         }
       };
-    };
       public static Departamento remover(Connection con, int numero) {
         String sql = "DELETE FROM Departamento WHERE numero=?";
         Departamento departamento = selecionar(con, numero);
     
-        if (departamento.getNumero() {
+        if (departamento.getNumero()) {
           throw new RuntimeException("Departamento não existe!");
         }
     
@@ -119,4 +118,36 @@ public class DepartamentoDAO {
           throw new RuntimeException(e);
         }
       }      
+      public static Departamento atualizar(Connection con, int numero, Departamento newDepartamento) {
+        String sql = "UPDATE Departamento SET numero=?, nome=?, cpf_gerente=?, data_ini_gerente=?";
+    
+        Departamento departamento = selecionar(con, numero);
+    
+        if (departamento.getNumero()) {
+          throw new RuntimeException("Departamento não existe!");
+        }
+    
+        try {
+          PreparedStatement statement = con.prepareStatement(sql);
+    
+          statement.setInt(1, newDepartamento.getNumero());
+          statement.setString(2, newDepartamento.getNome());
+          statement.setString(3, newDepartamento.getCpf_gerente());
+          statement.setDate(4, Date.valueOf(newDepartamento.getData_ini_gerente().toString()));
+    
+          statement.setInt(10, numero);
+    
+          statement.executeUpdate();
+          statement.close();
+    
+          Departamento departamentoS = selecionar(con, newDepartamento.getNumero());
+    
+          System.out.println(departamento.toString("Antigo"));
+          System.out.println(departamentoS.toString("Atualizado"));
+    
+          return departamento;
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      }
 }
