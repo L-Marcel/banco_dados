@@ -81,10 +81,10 @@ public class DepartamentoDAO {
           Departamento departamento = new Departamento();
     
           while (response.next()) {
-            empregado.setNumero(response.getInt("numero"));
-            empregado.setNome(response.getString("nome"));
-            empregado.setCpf_gerente(response.getLong("cpf_gerente"));
-            empregado.setData_ini_gerente(response.getDate("data_ini_gerente"));
+            departamento.setNumero(response.getInt("numero"));
+            departamento.setNome(response.getString("nome"));
+            departamento.setCpf_gerente(response.getLong("cpf_gerente"));
+            departamento.setData_ini_gente(response.getDate("data_ini_gerente"));
           }
     
           response.close();
@@ -99,7 +99,7 @@ public class DepartamentoDAO {
         String sql = "DELETE FROM Departamento WHERE numero=?";
         Departamento departamento = selecionar(con, numero);
     
-        if (departamento.getNumero()) {
+        if (departamento.getNumero() == -1) {
           throw new RuntimeException("Departamento não existe!");
         }
     
@@ -123,7 +123,7 @@ public class DepartamentoDAO {
     
         Departamento departamento = selecionar(con, numero);
     
-        if (departamento.getNumero()) {
+        if (departamento.getNumero() == -1) {
           throw new RuntimeException("Departamento não existe!");
         }
     
