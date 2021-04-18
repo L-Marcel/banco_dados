@@ -78,8 +78,8 @@ public class EmpregadoDAO {
    * 
    * @param con          - a conexão com o banco de dados
    * @param cpf          - uma String contendo o cpf do antigo empregado
-   * @param newEmpregado - o Empregado que será colocando do antigo Empregado
-   * @return o empregado deletado
+   * @param newEmpregado - o Empregado que será colocando sobre antigo Empregado
+   * @return o empregado antigo
    */
   public static Empregado atualizar(Connection con, String cpf, Empregado newEmpregado) {
     String sql = "UPDATE Empregado SET cpf=?, pnome=?, unome=?, data_nasc=?, endereco=?, salario=?, "

@@ -15,7 +15,8 @@ public class Empregado {
   int numeroDep = -1;
   String cpfSupervisor = null;
 
-  public Empregado() {}
+  public Empregado() {
+  }
 
   public Empregado(String cpf, String pnome, String unome, String dataNasc, String endereco, Double salario,
       String sexo, int numeroDep, String cpfSupervisor) {
