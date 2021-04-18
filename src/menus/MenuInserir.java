@@ -71,6 +71,7 @@ public class MenuInserir {
         String sexo = input.nextLine();
 
         Connection con = new ConnectionFactory().getConnection();
+        ConnectionFactory.selectDatabase(con);
         DepartamentoDAO.selecionar(con, atrsDepartamento, "");
 
         System.out.print("Informe o numero do departamento: ");
@@ -112,6 +113,7 @@ public class MenuInserir {
         int numDep = Integer.parseInt(input.nextLine());
 
         Connection con = new ConnectionFactory().getConnection();
+        ConnectionFactory.selectDatabase(con);
         EmpregadoDAO.selecionar(con, atrsEmpregado, "");
 
         System.out.print("Informe o cpf do gerente: ");

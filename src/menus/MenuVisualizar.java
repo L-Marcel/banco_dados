@@ -49,6 +49,7 @@ public class MenuVisualizar {
     public void visualizarEmpregado(Scanner input) {
         try {
             Connection con = new ConnectionFactory().getConnection();
+            ConnectionFactory.selectDatabase(con);
             EmpregadoDAO.selecionar(con, atrs, "");
             System.out.print("Aperte enter para continuar...");
             input.nextLine();
@@ -61,6 +62,7 @@ public class MenuVisualizar {
     public void visualizarDepartamento(Scanner input) {
         try {
             Connection con = new ConnectionFactory().getConnection();
+            ConnectionFactory.selectDatabase(con);
             DepartamentoDAO.selecionar(con, atrs, "");
             System.out.print("Aperte enter para continuar...");
             input.nextLine();
