@@ -17,7 +17,7 @@ public class DepartamentoDAO {
    * @param departamento - o departamento a ser adicionado
    */
   public static void adicionar(Connection con, Departamento departamento) {
-    String sql = "INSERT INTO Departamento " + "(numero,nome,cpf_gerente,data_ini_gerente) VALUES (?,?,?,?)";
+    String sql = "INSERT INTO Departamento (numero,nome,cpf_gerente,data_ini_gerente) VALUES (?,?,?,?)";
 
     try {
       PreparedStatement statement = con.prepareStatement(sql);
@@ -128,7 +128,7 @@ public class DepartamentoDAO {
       atrs = defaultAtrs;
     }
 
-    String sql = "SELECT " + (Converter.arrayToString(atrs, ",", false)) + " FROM Empregado " + where;
+    String sql = "SELECT " + (Converter.arrayToString(atrs, ",", false)) + " FROM Departamento " + where;
     String[][] rows = new String[0][0];
     Table table = new Table("Departamentos Selecionados", atrs, rows);
 

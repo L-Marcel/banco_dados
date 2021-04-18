@@ -3,6 +3,7 @@ package menus;
 import java.sql.*;
 import java.util.Scanner;
 
+import connections.ConnectionFactory;
 import daos.DepartamentoDAO;
 import daos.EmpregadoDAO;
 import entities.Departamento;
@@ -10,144 +11,136 @@ import entities.Empregado;
 import util.Render;
 
 public class MenuInserir {
+    String[] atrsDepartamento = { "numero", "nome" };
+    String[] atrsEmpregado = { "cpf", "pnome", "unome", "numero_dep" };
 
-    public void menuInserir(Scanner input, Connection con) {
-
+    public void menuInserir(Scanner input) {
         boolean continuar = true;
 
         while (continuar) {
-
-            Menu menuPrincipal = new Menu();
             System.out.println("Por favor, escolha de acordo com o número a tabela que deseja inserir dados:");
-            System.out.println("[0] - Voltar ao menu pricipal\n[1] - Empregado\n[2] - Departamento");
+            System.out.print("[0] - Voltar ao menu pricipal\n[1] - Empregado\n[2] - Departamento\nResposta: ");
 
             int opcaoEscolhida = Integer.parseInt(input.nextLine());
             System.out.println(Render.renderLine());
 
             if (opcaoEscolhida == 0) {
-
-                menuPrincipal.menu(input, con);
                 System.out.println(Render.renderLine());
-
-            }
-            if (opcaoEscolhida == 1) {
-                inserirEmpregado(input, con);
+                break;
+            } else if (opcaoEscolhida == 1) {
+                inserirEmpregado(input);
                 System.out.println(Render.renderLine());
-
-            }
-            if (opcaoEscolhida == 2) {
-                inserirDepartamento(input, con);
+            } else if (opcaoEscolhida == 2) {
+                inserirDepartamento(input);
                 System.out.println(Render.renderLine());
-
             } else {
                 System.out.println("Descupe, não conseguimos entender o que você deseja, tente novamente!");
                 System.out.println(Render.renderLine());
             }
         }
-
+   
     }
 
-    public void inserirEmpregado(Scanner input, Connection con) {
-
-        System.out.println("Informe o CPF do empregado: ");
+    public void inserirEmpregado(Scanner input) {
+        System.out.print("Informe o CPF do empregado: ");
         String cpfEmpre = input.nextLine();
 
-        System.out.println("Informe o primeiro nome do empregado: ");
+        System.out.print("Informe o primeiro nome do empregado: ");
         String pnome = input.nextLine();
 
-        System.out.println("Informe o último nome do empregado: ");
+        System.out.print("Informe o último nome do empregado: ");
         String unome = input.nextLine();
 
-        System.out.println("Informe o endereço do empregado: ");
+        System.out.print("Informe o endereço do empregado: ");
         String endereco = input.nextLine();
 
-        System.out.println("Informe o sálario do empregado, (Exemplo: 10000):");
+        System.out.print("Informe o sálario do empregado, (Exemplo: 10000): ");
         Double salario = Double.parseDouble(input.nextLine());
 
         System.out.println("Informe a data de nascimento do empregado.");
-        System.out.println("Dia:");
+        System.out.print("Dia: ");
         String dia = input.nextLine();
-        System.out.println("Mês:");
+        System.out.print("Mês: ");
         String mes = input.nextLine();
-        System.out.println("Ano:");
+        System.out.print("Ano: ");
         String ano = input.nextLine();
 
         String dataNasc = ano + "-" + mes + "-" + dia;
 
-        System.out.println("Informe o sexo do empregado (F ou M):");
+        System.out.print("Informe o sexo do empregado (F, M ou O): ");
         String sexo = input.nextLine();
 
-        System.out.println("Informe o numero do departamento:");
+        Connection con = new ConnectionFactory().getConnection();
+        DepartamentoDAO.selecionar(con, atrsDepartamento, "");
+
+        System.out.print("Informe o numero do departamento: ");
         int numDep = Integer.parseInt(input.nextLine());
 
-        System.out.println("O empregado possui supervisor?\n[0] - Não\n[1] - Sim");
+        Empregado empregado = new Empregado(cpfEmpre, pnome, unome, dataNasc, endereco, salario, sexo,
+        numDep);
+
+        System.out.print("O empregado possui supervisor?\n[0] - Não\n[1] - Sim\nResposta: ");
         int possuiSupervisor = Integer.parseInt(input.nextLine());
 
-        System.out.println("Por favor, confirme se deseja inserir o empregado:\n[0] - Desejo inserir\n[1] - Cancelar");
+
+        if (possuiSupervisor == 1) {
+            EmpregadoDAO.selecionar(con, atrsEmpregado, "");
+
+            System.out.print("Informe o cpf do supervisor: ");
+            String cpfSupervirsor = input.nextLine();
+
+            empregado.setCpfSupervisor(cpfSupervirsor);
+        }
+
+        System.out.print("Por favor, confirme se deseja inserir o empregado:\n[0] - Desejo inserir\n[1] - Cancelar\nResposta: ");
         int confirmacao = Integer.parseInt(input.nextLine());
 
         if (confirmacao == 0) {
-
             try {
-
-                if (possuiSupervisor == 0) {
-                    Empregado empregado = new Empregado(cpfEmpre, pnome, unome, dataNasc, endereco, salario, sexo,
-                            numDep);
-                    EmpregadoDAO.adicionar(con, empregado);
-                } else {
-                    System.out.println("Informe o cpf do supervisor:");
-                    String cpfSupervirsor = input.nextLine();
-                    Empregado empregado = new Empregado(cpfEmpre, pnome, unome, dataNasc, endereco, salario, sexo,
-                            numDep, cpfSupervirsor);
-
-                    EmpregadoDAO.adicionar(con, empregado);
-
-                }
-
+                System.out.println(Render.renderLine()+"\n");
+                EmpregadoDAO.adicionar(con, empregado);
+                con.close();
             } catch (Exception e) {
                 System.out.println("Não foi possivel inserir empregado.");
                 System.out.println(e.getMessage());
-
             }
-        } else {
-            menuInserir(input, con);
         }
-
     }
 
-    public void inserirDepartamento(Scanner input, Connection con) {
-
-        System.out.println("Informe o numero do departamento: ");
+    public void inserirDepartamento(Scanner input) {
+        System.out.print("Informe o numero do departamento: ");
         int numDep = Integer.parseInt(input.nextLine());
-        System.out.println("Informe o cpf do gerente: ");
+
+        Connection con = new ConnectionFactory().getConnection();
+        EmpregadoDAO.selecionar(con, atrsEmpregado, "");
+
+        System.out.print("Informe o cpf do gerente: ");
         String cpfGerente = input.nextLine();
-        System.out.println("Informe o nome do departamento: ");
+        System.out.print("Informe o nome do departamento: ");
         String nome = input.nextLine();
 
         System.out.println("Informe a data de inicio do gerente");
-        System.out.println("Dia:");
+        System.out.print("Dia:");
         String dia = input.nextLine();
-        System.out.println("Mês:");
+        System.out.print("Mês:");
         String mes = input.nextLine();
-        System.out.println("Ano:");
+        System.out.print("Ano:");
         String ano = input.nextLine();
 
         String dataInicio = ano + "-" + mes + "-" + dia;
 
-        System.out.println("Por favor, confirme se deseja inserir o empregado:\n[0] - Desejo inserir\n[1] - Cancelar");
+        System.out.print("Por favor, confirme se deseja inserir o departamento:\n[0] - Desejo inserir\n[1] - Cancelar\nResposta: ");
         int confirmacao = Integer.parseInt(input.nextLine());
 
         if (confirmacao == 0) {
             try {
-
+                System.out.println(Render.renderLine()+"\n");
                 Departamento dep = new Departamento(numDep, nome, cpfGerente, dataInicio);
                 DepartamentoDAO.adicionar(con, dep);
-
+                con.close();
             } catch (Exception ex) {
                 System.out.println("Não foi possivel inserir departamento.\n" + ex.getMessage());
-
             }
         }
-
     }
 }

@@ -60,12 +60,12 @@ public class Departamento {
   public String toString() {
     return Render.renderLine("Departamento") + "\n" + "Número: " + this.numero + "\n" + "Nome: " + this.nome + " "
         + "\n" + "CPF do gerente: " + this.getCpfGerente() + "\n" + "Data de inicio do gerente: "
-        + this.getDataIniGerente() + "\n" + "\n" + Render.renderLine() + "\n";
+        + this.getDataIniGerente() + "\n" + Render.renderLine() + "\n";
   }
 
   public String toString(String action) {
     return Render.renderLine("Departamento " + action) + "\n" + "Número: " + this.numero + "\n" + "Nome: " + this.nome
         + " " + "\n" + "CPF do gerente: " + this.getCpfGerente() + "\n" + "Data de inicio do gerente: "
-        + this.getDataIniGerente() + "\n" + "\n" + Render.renderLine() + "\n";
+        + this.getDataIniGerente() + "\n" + Render.renderLine() + "\n";
   }
 }
