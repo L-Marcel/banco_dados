@@ -181,7 +181,7 @@ public class DepartamentoDAO {
       while (response.next()) {
         departamento.setNumero(response.getInt("numero"));
         departamento.setNome(response.getString("nome"));
-        departamento.setCpfGerente(response.getLong("cpf_gerente"));
+        departamento.setCpfGerente(response.getLong("Fcpf_gerente"));
         departamento.setDataIniGenrente(response.getDate("data_ini_gerente"));
       }
 

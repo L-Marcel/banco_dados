@@ -6,6 +6,7 @@ import entities.Empregado;
 import util.Converter;
 import util.Default;
 import util.Functions;
+import util.Render;
 import table.Table;
 
 //Adicionar, remover, atualizar, selecionar
@@ -83,12 +84,15 @@ public class EmpregadoDAO {
    */
   public static Empregado atualizar(Connection con, String cpf, Empregado newEmpregado) {
     String sql = "UPDATE Empregado SET cpf=?, pnome=?, unome=?, data_nasc=?, endereco=?, salario=?, "
-    + "sexo=?, numero_dep=?, cpf_supervisor=? WHERE cpf=?";
+        + "sexo=?, numero_dep=?, cpf_supervisor=? WHERE cpf=?";
 
     Empregado empregado = selecionar(con, cpf);
 
     if (empregado.getCpf().equals("00000000000")) {
-      throw new RuntimeException("Empregado não existe!!!");
+
+      throw new RuntimeException("\nEmpregado não existe!");
+ 
+
     }
 
     try {
