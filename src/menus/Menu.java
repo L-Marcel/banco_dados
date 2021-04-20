@@ -10,6 +10,7 @@ public class Menu {
     MenuInserir mInserir = new MenuInserir();
     MenuVisualizar mVisualizar = new MenuVisualizar();
     MenuAtualizar mAtualizar = new MenuAtualizar();
+    MenuExcluir mExcluir = new MenuExcluir();
 
     public void menu(Scanner input) {
         boolean continuar = true;
@@ -28,7 +29,7 @@ public class Menu {
             } else if (opcaoEscolhida == 2) {
                 mInserir.menuInserir(input);
             } else if (opcaoEscolhida == 3) {
-
+                mExcluir.menuExcluir(input);
             } else if (opcaoEscolhida == 4) {
                 mAtualizar.menuAtualizar(input);
             } else {

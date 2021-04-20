@@ -5,21 +5,25 @@ import java.util.Scanner;
 
 import connections.ConnectionFactory;
 import daos.DepartamentoDAO;
+import daos.DependenteDAO;
 import daos.EmpregadoDAO;
 import entities.Departamento;
+import entities.Dependente;
 import entities.Empregado;
 import util.Render;
 
 public class MenuInserir {
     String[] atrsDepartamento = { "numero", "nome" };
     String[] atrsEmpregado = { "cpf", "pnome", "unome", "numero_dep" };
+    String[] atrsDependente = { "nome", "cpf_empregado", "parentesco" };
 
     public void menuInserir(Scanner input) {
         boolean continuar = true;
 
         while (continuar) {
             System.out.println("Por favor, escolha de acordo com o número a tabela que deseja inserir dados:");
-            System.out.print("[0] - Voltar ao menu pricipal\n[1] - Empregado\n[2] - Departamento\nResposta: ");
+            System.out.print(
+                    "[0] - Voltar ao menu pricipal\n[1] - Empregado\n[2] - Departamento\n[3] - Dependente\nResposta: ");
 
             int opcaoEscolhida = Integer.parseInt(input.nextLine());
             System.out.println(Render.renderLine());
@@ -33,12 +37,15 @@ public class MenuInserir {
             } else if (opcaoEscolhida == 2) {
                 inserirDepartamento(input);
                 System.out.println(Render.renderLine());
+            } else if (opcaoEscolhida == 3) {
+                inserirDependente(input);
+                System.out.println(Render.renderLine());
             } else {
                 System.out.println("Descupe, não conseguimos entender o que você deseja, tente novamente!");
                 System.out.println(Render.renderLine());
             }
         }
-   
+
     }
 
     public void inserirEmpregado(Scanner input) {
@@ -77,12 +84,10 @@ public class MenuInserir {
         System.out.print("Informe o numero do departamento: ");
         int numDep = Integer.parseInt(input.nextLine());
 
-        Empregado empregado = new Empregado(cpfEmpre, pnome, unome, dataNasc, endereco, salario, sexo,
-        numDep);
+        Empregado empregado = new Empregado(cpfEmpre, pnome, unome, dataNasc, endereco, salario, sexo, numDep);
 
         System.out.print("O empregado possui supervisor?\n[0] - Não\n[1] - Sim\nResposta: ");
         int possuiSupervisor = Integer.parseInt(input.nextLine());
-
 
         if (possuiSupervisor == 1) {
             EmpregadoDAO.selecionar(con, atrsEmpregado, "");
@@ -93,12 +98,13 @@ public class MenuInserir {
             empregado.setCpfSupervisor(cpfSupervirsor);
         }
 
-        System.out.print("Por favor, confirme se deseja inserir o empregado:\n[0] - Desejo inserir\n[1] - Cancelar\nResposta: ");
+        System.out.print(
+                "Por favor, confirme se deseja inserir o empregado:\n[0] - Desejo inserir\n[1] - Cancelar\nResposta: ");
         int confirmacao = Integer.parseInt(input.nextLine());
 
         if (confirmacao == 0) {
             try {
-                System.out.println(Render.renderLine()+"\n");
+                System.out.println(Render.renderLine() + "\n");
                 EmpregadoDAO.adicionar(con, empregado);
                 con.close();
             } catch (Exception e) {
@@ -109,12 +115,12 @@ public class MenuInserir {
     }
 
     public void inserirDepartamento(Scanner input) {
-        System.out.print("Informe o numero do departamento: ");
-        int numDep = Integer.parseInt(input.nextLine());
-
         Connection con = new ConnectionFactory().getConnection();
         ConnectionFactory.selectDatabase(con);
         EmpregadoDAO.selecionar(con, atrsEmpregado, "");
+
+        System.out.print("Informe o numero do departamento: ");
+        int numDep = Integer.parseInt(input.nextLine());
 
         System.out.print("Informe o cpf do gerente: ");
         String cpfGerente = input.nextLine();
@@ -131,12 +137,13 @@ public class MenuInserir {
 
         String dataInicio = ano + "-" + mes + "-" + dia;
 
-        System.out.print("Por favor, confirme se deseja inserir o departamento:\n[0] - Desejo inserir\n[1] - Cancelar\nResposta: ");
+        System.out.print(
+                "Por favor, confirme se deseja inserir o departamento:\n[0] - Desejo inserir\n[1] - Cancelar\nResposta: ");
         int confirmacao = Integer.parseInt(input.nextLine());
 
         if (confirmacao == 0) {
             try {
-                System.out.println(Render.renderLine()+"\n");
+                System.out.println(Render.renderLine() + "\n");
                 Departamento dep = new Departamento(numDep, nome, cpfGerente, dataInicio);
                 DepartamentoDAO.adicionar(con, dep);
                 con.close();
@@ -145,4 +152,48 @@ public class MenuInserir {
             }
         }
     }
+
+    public void inserirDependente(Scanner input) {
+
+        Connection con = new ConnectionFactory().getConnection();
+        ConnectionFactory.selectDatabase(con);
+        DependenteDAO.selecionar(con, atrsDependente, "");
+
+        System.out.print("Informe o nome do dependente: ");
+        String nome = input.nextLine();
+
+        System.out.print("Informe o cpf do empregado: ");
+        String cpfEmpregado = input.nextLine();
+
+        System.out.print("Informe o sexo do empregado: ");
+        String sexo = input.nextLine();
+        System.out.print("Informe o parentesco com o empregado: ");
+        String parentesco = input.nextLine();
+
+        System.out.println("Informe a data de nascimento do dependente.");
+        System.out.print("Dia:");
+        String dia = input.nextLine();
+        System.out.print("Mês:");
+        String mes = input.nextLine();
+        System.out.print("Ano:");
+        String ano = input.nextLine();
+
+        String dataNasc = ano + "-" + mes + "-" + dia;
+
+        System.out.print(
+                "Por favor, confirme se deseja inserir o dependente:\n[0] - Desejo inserir\n[1] - Cancelar\nResposta: ");
+        int confirmacao = Integer.parseInt(input.nextLine());
+
+        if (confirmacao == 0) {
+            try {
+                System.out.println(Render.renderLine() + "\n");
+                Dependente dependente = new Dependente(nome, cpfEmpregado, dataNasc, sexo, parentesco);
+                DependenteDAO.adicionar(con, dependente);
+                con.close();
+            } catch (Exception ex) {
+                System.out.println("Não foi possivel inserir o dependente.\n" + ex.getMessage());
+            }
+        }
+    }
+
 }

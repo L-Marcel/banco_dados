@@ -67,19 +67,17 @@ public class MenuExcluir {
         }
 
     }
-    // public void excluirDependente(Scanner input){
-    //     try {
-    //         Connection con = new ConnectionFactory().getConnection();
-    //         ConnectionFactory.selectDatabase(con);
+    public void excluirDependente(Scanner input){
+        try {
+            Connection con = new ConnectionFactory().getConnection();
+            ConnectionFactory.selectDatabase(con);
+            System.out.println("Informe o cpf do empregado do dependente que deseja excluir: ");
+            String cpf = input.nextLine();
+            DependenteDAO.remover(con, cpf);
+            con.close();
+        } catch (Exception e) {
+            System.out.println("Não foi possivel excluir o dependente." + e);
+        }
 
-    //         System.out.println("Informe o cpf do empregado do dependente que deseja excluir: ");
-    //         String cpf = input.nextLine();
-    //         DependenteDAO.remover(con, cpfEmpregado)
-
-    //         con.close();
-    //     } catch (Exception e) {
-    //         System.out.println("Não foi possivel excluir o departamento." + e);
-    //     }
-
-    // }
+    }
 }
