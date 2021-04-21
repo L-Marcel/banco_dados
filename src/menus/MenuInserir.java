@@ -108,7 +108,8 @@ public class MenuInserir {
     }
 
     public void inserirDepartamento(Scanner input) {
-        System.out.print("Informe o numero do departamento: ");
+        DepartamentoDAO.selecionar(atrsDepartamento, "");
+        System.out.print("Informe o numero do novo departamento: ");
         int numDep = Integer.parseInt(input.nextLine());
 
         EmpregadoDAO.selecionar(atrsEmpregado, "");
@@ -119,11 +120,11 @@ public class MenuInserir {
         String nome = input.nextLine();
 
         System.out.println("Informe a data de inicio do gerente");
-        System.out.print("Dia:");
+        System.out.print("Dia: ");
         String dia = input.nextLine();
-        System.out.print("Mês:");
+        System.out.print("Mês: ");
         String mes = input.nextLine();
-        System.out.print("Ano:");
+        System.out.print("Ano: ");
         String ano = input.nextLine();
 
         String dataInicio = ano + "-" + mes + "-" + dia;
@@ -146,9 +147,10 @@ public class MenuInserir {
     public void inserirDependente(Scanner input) {
         DependenteDAO.selecionar(atrsDependente, "");
 
-        System.out.print("Informe o nome do dependente: ");
+        System.out.print("Informe o nome do novo dependente: ");
         String nome = input.nextLine();
 
+        EmpregadoDAO.selecionar(atrsEmpregado, "");
         System.out.print("Informe o cpf do empregado: ");
         String cpfEmpregado = input.nextLine();
 
@@ -158,11 +160,11 @@ public class MenuInserir {
         String parentesco = input.nextLine();
 
         System.out.println("Informe a data de nascimento do dependente.");
-        System.out.print("Dia:");
+        System.out.print("Dia: ");
         String dia = input.nextLine();
-        System.out.print("Mês:");
+        System.out.print("Mês: ");
         String mes = input.nextLine();
-        System.out.print("Ano:");
+        System.out.print("Ano: ");
         String ano = input.nextLine();
 
         String dataNasc = ano + "-" + mes + "-" + dia;

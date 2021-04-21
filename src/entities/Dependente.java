@@ -65,15 +65,17 @@ public void setParentesco(String parentesco) {
 
 @Override
 public String toString() {
-    return "Dependente [cpfEmpregado=" + cpfEmpregado + ", dataNasc=" + dataNasc + ", nome=" + nome + ", parentesco="
-            + parentesco + ", sexo=" + sexo + "]";
+    return Render.renderLine("Dependente") + "\n" + "Nome: " + this.nome
+    + " " + "\n" + "CPF do empregado: " + this.getCpfEmpregado() + "\n" + "Data de nascimento do dependente: "
+    + this.getDataNasc() + "\n" + Render.renderLine() + "\n" + "Sexo: " + this.sexo
+    + " " + "\n" + "Prentesco: " + this.parentesco + "\n"  + Render.renderLine() + "\n";
 }
 
 public String toString(String action) {
     return Render.renderLine("Dependente " + action) + "\n" + "Nome: " + this.nome
         + " " + "\n" + "CPF do empregado: " + this.getCpfEmpregado() + "\n" + "Data de nascimento do dependente: "
         + this.getDataNasc() + "\n" + Render.renderLine() + "\n" + "Sexo: " + this.sexo
-        + " " + "\n" + "Prentesco: " + this.parentesco + "\n"  + Render.renderLine();
+        + " " + "\n" + "Prentesco: " + this.parentesco + "\n"  + Render.renderLine() + "\n";
   }
     
 }

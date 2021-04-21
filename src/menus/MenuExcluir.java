@@ -40,7 +40,7 @@ public class MenuExcluir {
     public void excluirEmpregado(Scanner input) {
         try {
             EmpregadoDAO.selecionar(atrsEmpregado, "");
-            System.out.println("Informe o cpf do empregado que deseja excluir: ");
+            System.out.print("Informe o cpf do empregado que deseja excluir: ");
             String cpf = input.nextLine();
             EmpregadoDAO.remover(cpf);
         } catch (Exception e) {

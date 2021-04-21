@@ -27,7 +27,7 @@ public class DependenteDAO {
       statement.setString(2, dependente.getCpfEmpregado());
       statement.setDate(3, Date.valueOf(dependente.getDataNasc().toString()));
       statement.setString(4, dependente.getSexo());
-      statement.setString(4, dependente.getParentesco());
+      statement.setString(5, dependente.getParentesco());
 
       statement.execute();
       statement.close();
