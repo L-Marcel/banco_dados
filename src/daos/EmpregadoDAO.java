@@ -2,11 +2,11 @@ package daos;
 
 import java.sql.*;
 
+import connections.ConnectionFactory;
 import entities.Empregado;
 import util.Converter;
 import util.Default;
 import util.Functions;
-import util.Render;
 import table.Table;
 
 //Adicionar, remover, atualizar, selecionar
@@ -14,10 +14,10 @@ public class EmpregadoDAO {
   /**
    * Adiciona um empregado no banco de dados
    * 
-   * @param con       - a conexão com o banco de dados
    * @param empregado - o empregado a ser adicionado
    */
-  public static void adicionar(Connection con, Empregado empregado) {
+  public static void adicionar(Empregado empregado) {
+    Connection con = ConnectionFactory.getConnection();
     String sql = "INSERT INTO Empregado "
         + "(cpf,pnome,unome,data_nasc,endereco,salario,sexo,numero_dep,cpf_supervisor) VALUES (?,?,?,?,?,?,?,?,?)";
 
@@ -36,7 +36,7 @@ public class EmpregadoDAO {
 
       statement.execute();
       statement.close();
-
+      con.close();
       System.out.println(empregado.toString("Criado"));
     } catch (Exception e) {
       System.out.print(e);
@@ -46,13 +46,13 @@ public class EmpregadoDAO {
   /**
    * Deleta um único empregado do banco de dados
    * 
-   * @param con - a conexão com o banco de dados
    * @param cpf - uma String contendo o cpf
    * @return o empregado deletado
    */
-  public static Empregado remover(Connection con, String cpf) {
+  public static Empregado remover(String cpf) {
+    Connection con = ConnectionFactory.getConnection();
     String sql = "DELETE FROM Empregado WHERE cpf=?";
-    Empregado empregado = selecionar(con, cpf);
+    Empregado empregado = selecionar(cpf);
 
     if (empregado.getCpf().equals("00000000000")) {
       throw new RuntimeException("Empregado não existe!!!");
@@ -77,16 +77,16 @@ public class EmpregadoDAO {
   /**
    * Atualiza um único empregado do banco de dados
    * 
-   * @param con          - a conexão com o banco de dados
    * @param cpf          - uma String contendo o cpf do antigo empregado
    * @param newEmpregado - o Empregado que será colocando sobre antigo Empregado
    * @return o empregado antigo
    */
-  public static Empregado atualizar(Connection con, String cpf, Empregado newEmpregado) {
+  public static Empregado atualizar(String cpf, Empregado newEmpregado) {
+    Connection con = ConnectionFactory.getConnection();
     String sql = "UPDATE Empregado SET cpf=?, pnome=?, unome=?, data_nasc=?, endereco=?, salario=?, "
         + "sexo=?, numero_dep=?, cpf_supervisor=? WHERE cpf=?";
 
-    Empregado empregado = selecionar(con, cpf);
+    Empregado empregado = selecionar(cpf);
 
     if (empregado.getCpf().equals("00000000000")) {
 
@@ -112,8 +112,9 @@ public class EmpregadoDAO {
 
       statement.executeUpdate();
       statement.close();
+      con.close();
 
-      Empregado empregadoRes = selecionar(con, newEmpregado.getCpf());
+      Empregado empregadoRes = selecionar(newEmpregado.getCpf());
 
       System.out.println(empregado.toString("Antigo"));
       System.out.println(empregadoRes.toString("Atualizado"));
@@ -127,7 +128,6 @@ public class EmpregadoDAO {
   /**
    * Seleciona um conjunto de empregados do banco de dados
    * 
-   * @param con   - a conexão com o banco de dados
    * @param atrs  - um array do tipo String[] com os atributos que devem ser
    *              coletados (se não conter nenhum item, todos os atributos serão
    *              coletados)
@@ -136,7 +136,8 @@ public class EmpregadoDAO {
    *              empregados)
    * @return uma tabela
    */
-  public static Table selecionar(Connection con, String atrs[], String where) {
+  public static Table selecionar(String atrs[], String where) {
+    Connection con = ConnectionFactory.getConnection();
     String[] defaultAtrs = { "cpf", "pnome", "unome", "data_nasc", "endereco", "salario", "sexo", "numero_dep",
         "cpf_supervisor" };
 
@@ -168,7 +169,7 @@ public class EmpregadoDAO {
 
       response.close();
       statement.close();
-
+      con.close();
       table.renderTable();
       return table;
     } catch (SQLException e) {
@@ -179,11 +180,11 @@ public class EmpregadoDAO {
   /**
    * Seleciona um único empregado do banco de dados
    * 
-   * @param con - a conexão com o banco de dados
    * @param cpf - uma String contendo o cpf
    * @return o empregado
    */
-  public static Empregado selecionar(Connection con, String cpf) {
+  public static Empregado selecionar(String cpf) {
+    Connection con = ConnectionFactory.getConnection();
     String sql = "SELECT * FROM Empregado WHERE cpf=?";
 
     try {
@@ -208,7 +209,7 @@ public class EmpregadoDAO {
 
       response.close();
       statement.close();
-
+      con.close();
       return empregado;
     } catch (SQLException e) {
       throw new RuntimeException(e);

@@ -1,6 +1,5 @@
 package menus;
 
-import java.sql.Connection;
 import java.util.Scanner;
 
 import util.Render;

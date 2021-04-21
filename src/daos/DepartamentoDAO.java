@@ -2,6 +2,7 @@ package daos;
 
 import java.sql.*;
 
+import connections.ConnectionFactory;
 import util.Converter;
 import util.Default;
 import util.Functions;
@@ -13,10 +14,10 @@ public class DepartamentoDAO {
   /**
    * Adiciona um departamento no banco de dados
    * 
-   * @param con          - a conexão com o banco de dados
    * @param departamento - o departamento a ser adicionado
    */
-  public static void adicionar(Connection con, Departamento departamento) {
+  public static void adicionar(Departamento departamento) {
+    Connection con = ConnectionFactory.getConnection();
     String sql = "INSERT INTO Departamento (numero,nome,cpf_gerente,data_ini_gerente) VALUES (?,?,?,?)";
 
     try {
@@ -29,7 +30,7 @@ public class DepartamentoDAO {
 
       statement.execute();
       statement.close();
-
+      con.close();
       System.out.println(departamento.toString("Criado"));
     } catch (Exception e) {
       System.out.print(e);
@@ -39,13 +40,13 @@ public class DepartamentoDAO {
   /**
    * Deleta um único departamento do banco de dados
    * 
-   * @param con    - a conexão com o banco de dados
    * @param numero - um inteiro contendo o numero do departamento
    * @return o departamento deletado
    */
-  public static Departamento remover(Connection con, int numero) {
+  public static Departamento remover(int numero) {
+    Connection con = ConnectionFactory.getConnection();
     String sql = "DELETE FROM Departamento WHERE numero=?";
-    Departamento departamento = selecionar(con, numero);
+    Departamento departamento = selecionar(numero);
 
     if (departamento.getNumero() == -1) {
       throw new RuntimeException("Departamento não existe!");
@@ -58,9 +59,8 @@ public class DepartamentoDAO {
 
       statement.execute();
       statement.close();
-
+      con.close();
       System.out.println(departamento.toString("Deletado"));
-
       return departamento;
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -70,16 +70,16 @@ public class DepartamentoDAO {
   /**
    * Atualiza um único departamento do banco de dados
    * 
-   * @param con             - a conexão com o banco de dados
    * @param numero          - um inteiro contendo o numero do antigo departamento
    * @param newDepartamento - o Departamento que será colocando sobre antigo
    *                        Departamento
    * @return o empregado antigo
    */
-  public static Departamento atualizar(Connection con, int numero, Departamento newDepartamento) {
+  public static Departamento atualizar(int numero, Departamento newDepartamento) {
+    Connection con = ConnectionFactory.getConnection();
     String sql = "UPDATE Departamento SET numero=?, nome=?, cpf_gerente=?, data_ini_gerente=? WHERE numero=?";
 
-    Departamento departamento = selecionar(con, numero);
+    Departamento departamento = selecionar(numero);
 
     if (departamento.getNumero() == -1) {
       throw new RuntimeException("Departamento não existe!");
@@ -97,8 +97,8 @@ public class DepartamentoDAO {
 
       statement.executeUpdate();
       statement.close();
-
-      Departamento departamentoS = selecionar(con, newDepartamento.getNumero());
+      con.close();
+      Departamento departamentoS = selecionar(newDepartamento.getNumero());
 
       System.out.println(departamento.toString("Antigo"));
       System.out.println(departamentoS.toString("Atualizado"));
@@ -112,7 +112,6 @@ public class DepartamentoDAO {
   /**
    * Seleciona um conjunto de departamentos do banco de dados
    * 
-   * @param con   - a conexão com o banco de dados
    * @param atrs  - um array do tipo String[] com os atributos que devem ser
    *              coletados (se não conter nenhum item, todos os atributos serão
    *              coletados)
@@ -121,7 +120,8 @@ public class DepartamentoDAO {
    *              departamentos)
    * @return uma tabela
    */
-  public static Table selecionar(Connection con, String atrs[], String where) {
+  public static Table selecionar(String atrs[], String where) {
+    Connection con = ConnectionFactory.getConnection();
     String[] defaultAtrs = { "numero", "nome", "cpf_gerente", "data_ini_gerente" };
 
     if (atrs.length == 0) {
@@ -152,7 +152,7 @@ public class DepartamentoDAO {
 
       response.close();
       statement.close();
-
+      con.close();
       table.renderTable();
       return table;
     } catch (SQLException e) {
@@ -163,11 +163,11 @@ public class DepartamentoDAO {
   /**
    * Seleciona um único departamento do banco de dados
    * 
-   * @param con    - a conexão com o banco de dados
    * @param numero - uma String contendo o numero do departamento
    * @return o departamento
    */
-  public static Departamento selecionar(Connection con, int numero) {
+  public static Departamento selecionar(int numero) {
+    Connection con = ConnectionFactory.getConnection();
     String sql = "SELECT * FROM Departamento WHERE numero=?";
 
     try {
@@ -181,12 +181,13 @@ public class DepartamentoDAO {
       while (response.next()) {
         departamento.setNumero(response.getInt("numero"));
         departamento.setNome(response.getString("nome"));
-        departamento.setCpfGerente(response.getLong("Fcpf_gerente"));
+        departamento.setCpfGerente(response.getLong("cpf_gerente"));
         departamento.setDataIniGenrente(response.getDate("data_ini_gerente"));
       }
 
       response.close();
       statement.close();
+      con.close();
 
       return departamento;
     } catch (SQLException e) {

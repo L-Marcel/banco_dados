@@ -3,9 +3,11 @@ package connections;
 import java.sql.*;
 
 public class ConnectionFactory {
- public Connection getConnection() {
+ public static Connection getConnection() {
   try {
-   return DriverManager.getConnection(Credentials.getServer(), Credentials.getUser(), Credentials.getPassword());
+   Connection con = DriverManager.getConnection(Credentials.getServer(), Credentials.getUser(), Credentials.getPassword());
+   ConnectionFactory.selectDatabase(con);
+   return con;
   } catch (SQLException e) {
    throw new RuntimeException(e);
   }
