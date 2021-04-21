@@ -75,9 +75,10 @@ public class DependenteDAO {
   /**
    * Atualiza um único dependente do banco de dados
    * 
-   * @param numero          - um inteiro contendo o numero do antigo departamento
-   * @param newDepartamento - o Departamento que será colocando sobre antigo
-   *                        Departamento
+   * @param cpfEmpregado  - uma String contendo o cpf do empregado do antigo dependente
+   * @param nome          - um inteiro contendo o nome do antigo dependente
+   * @param newDependente - o Dependente que será colocando sobre antigo
+   *                        Dependente
    * @return o dependente antigo
    */
   public static Dependente atualizar(String cpfEmpregado, String nome, Dependente newDependente) {
@@ -116,6 +117,17 @@ public class DependenteDAO {
     }
   }
 
+  /**
+   * Seleciona um conjunto de dependentes do banco de dados
+   * 
+   * @param atrs  - um array do tipo String[] com os atributos que devem ser
+   *              coletados (se não conter nenhum item, todos os atributos serão
+   *              coletados)
+   * @param where - uma String com o filtro utilizado para selecionar os
+   *              dependentes (se for uma String vazia, retornará todos os
+   *              dependentes)
+   * @return uma tabela
+   */
   public static Table selecionar(String atrs[], String where) {
     Connection con = ConnectionFactory.getConnection();
     String[] defaultAtrs = { "nome", "cpf_empregado", "data_nasc", "sexo", "parentesco" };
@@ -133,16 +145,22 @@ public class DependenteDAO {
       ResultSet response = statement.executeQuery();
 
       while (response.next()) {
-        String[] row = new String[0];
+        String[] row = new String[0]; //Cria a linha da tabela
         for (int x = 0; x <= defaultAtrs.length - 1; x++) {
-          String value = "";
+          String value = ""; //O valor da coluna a ser adicionada na linha
           for (int y = 0; y <= atrs.length - 1; y++) {
-            if (defaultAtrs[x].equals(atrs[y])) {
+            if (defaultAtrs[x].equals(atrs[y])) { //Se o nome da coluna estiver na lista padrão
+              //Tenta pegar pegar uma String com o valor da coluna
+              //Se for null ou uma String vazia retorna "null"
               value = Default.defaultValue("null", response.getString(defaultAtrs[x]));
+
+              //Adiciona as colunas na linha
               row = Functions.addInArray(row, value);
             }
           }
         }
+
+        //Adiciona as linhas na tabela
         table.addRow(row);
       }
 
@@ -156,6 +174,13 @@ public class DependenteDAO {
     }
   };
 
+  /**
+   * Seleciona um único dependente do banco de dados
+   * 
+   * @param cpfEmpregado - uma String contendo o cpf do empregado do dependente
+   * @param nome         - uma String contendo o nome do dependente
+   * @return o dependente
+   */
   public static Dependente selecionar(String cpfEmpregado, String nome) {
     Connection con = ConnectionFactory.getConnection();
     String sql = "SELECT * FROM Dependente WHERE cpf_empregado=? AND nome=?";
@@ -171,7 +196,7 @@ public class DependenteDAO {
 
       while (response.next()) {
         dependente.setNome(response.getString("nome"));
-        dependente.setCpfEmpregado(response.getLong("cpf_dependente"));
+        dependente.setCpfEmpregado(response.getLong("cpf_empregado"));
         dependente.setDataNasc(response.getDate("data_nasc"));
         dependente.setSexo(response.getString("sexo"));
         dependente.setParentesco(response.getString("parentesco"));

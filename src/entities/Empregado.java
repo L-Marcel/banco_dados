@@ -139,17 +139,17 @@ public class Empregado {
   @Override
   public String toString() {
     return Render.renderLine("Empregado") + "\n" + "CPF: " + this.getCpf() + "\n" + "Nome completo: " + this.pnome + " "
-        + this.unome + "\n" + "Salário: R$ " + this.salario + "\n" + "Data de nascimento: " + this.dataNasc + "\n"
-        + "Endereço: " + this.endereco + "\n" + "Sexo: " + this.getSexo(true) + "\n" + Render.renderLine() + "\n"
-        + "Supervisor: " + this.cpfSupervisor + "\n" + "Departamento: " + this.numeroDep + "\n" + Render.renderLine()
-        + "\n";
+      + this.unome + "\n" + "Salário: R$ " + this.salario + "\n" + "Data de nascimento: " + this.dataNasc + "\n"
+      + "Endereço: " + this.endereco + "\n" + "Sexo: " + this.getSexo(true) + "\n" + Render.renderLine() + "\n"
+      + "Supervisor: " + this.cpfSupervisor + "\n" + "Departamento: " + this.numeroDep + "\n" + Render.renderLine()
+      + "\n";
   }
 
   public String toString(String action) {
     return Render.renderLine("Empregado " + action) + "\n" + "CPF: " + this.getCpf() + "\n" + "Nome completo: "
-        + this.pnome + " " + this.unome + "\n" + "Salário: R$ " + this.salario + "\n" + "Data de nascimento: "
-        + this.dataNasc + "\n" + "Endereço: " + this.endereco + "\n" + "Sexo: " + this.getSexo(true) + "\n"
-        + Render.renderLine() + "\n" + "Supervisor: " + this.cpfSupervisor + "\n" + "Departamento: " + this.numeroDep
-        + "\n" + Render.renderLine() + "\n";
+      + this.pnome + " " + this.unome + "\n" + "Salário: R$ " + this.salario + "\n" + "Data de nascimento: "
+      + this.dataNasc + "\n" + "Endereço: " + this.endereco + "\n" + "Sexo: " + this.getSexo(true) + "\n"
+      + Render.renderLine() + "\n" + "Supervisor: " + this.cpfSupervisor + "\n" + "Departamento: " + this.numeroDep
+      + "\n" + Render.renderLine() + "\n";
   }
 }

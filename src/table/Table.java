@@ -69,36 +69,59 @@ public class Table {
 
   /**
    * Renderiza a tabela
+   * @author Marcel
    */
   public void renderTable() {
+    //Antes de tudo: essa droga deu muito trabalho
+
+    //Pega o tamanho da maior linha
+    //Minimo: 40
     int qtdOfLines = getMaxLengthOfRow(5);
     int defaultQtdOfLines = 40;
-
     if (qtdOfLines < defaultQtdOfLines) {
       qtdOfLines = defaultQtdOfLines;
     }
 
+    //Renderiza o titulo
+    //O -1 é para o "|" não passar
     System.out.println("\n|" + Render.renderLine("[ " + this.title + " ]", qtdOfLines - 1) + "|");
 
-    for (int x = 0; x <= rows.length - 1; x++) {
-      for (int y = 0; y <= rows[x].length - 1; y++) {
-        int max = getMaxLengthOfColumn(y);
+    //Roda a matriz formada por colunas e linhas
+    for (int x = 0; x <= rows.length - 1; x++) { //A linha
+      for (int y = 0; y <= rows[x].length - 1; y++) { //A coluna
+        //O tamanho da maior coluna
+        //Ps: considera todas as linhas
+        int max = getMaxLengthOfColumn(y); 
 
+        //O formato a ser imprimido
+        //O %- indica que a formatação será para a esquerda
+        //O max + 5 é o tamanho da maior coluna +5
         String format = "%-" + (max + 5) + "s";
-        int rlen = rows[x].length;
-        int newLen = getMaxLengthOfRow(5 * rlen);
+        //Pega o tamanho da linha atual
+        int rlen = rows[x].length; 
+        //Pega o tamanho da maior linha da tabela e adicona
+        //5 vezes o tamanho da atual 
+        //(pq é dificil 5 colunas não darem maior ou igual a 40)
+        int newLen = getMaxLengthOfRow(5 * rlen); 
 
+        //Se o tamanho da maior linha + 5 for menor que 40 
+        //e o tamanho da maior + 5 vezes o tamanho da atual for
+        //menor ou igual a 40
         if(getMaxLengthOfRow(5) < qtdOfLines &&  newLen >= qtdOfLines){
+          //Significa que o tamnho da linha é maior ou igual a  40
+          //Então o formado (tamanho de cada coluna)
+          //Vai ser newLen/rlen
+          //Indicando que cada coluna vai ter um tamanho proporcional
+          //Ao tamanho máximo da linha
           format = "%-" + (newLen/rlen) + "s";
         }else if(newLen < qtdOfLines){
+          //Se o tamanho máximo da linha for menor que 40
+          //Tem q considerar o tamanho máximo 40
+          //Para não estragar o titulo
           format = "%-" + (qtdOfLines/rlen) + "s";
         }
-
-        if (x == 0) {
-          System.out.printf(format, "| " + rows[x][y]);
-        } else {
-          System.out.printf(format, "| " + rows[x][y]);
-        }
+          
+        System.out.printf(format, "| " + rows[x][y]);
       }
 
       if (x == 0) {

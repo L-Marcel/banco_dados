@@ -137,16 +137,22 @@ public class DepartamentoDAO {
       ResultSet response = statement.executeQuery();
 
       while (response.next()) {
-        String[] row = new String[0];
+        String[] row = new String[0]; //Cria a linha da tabela
         for (int x = 0; x <= defaultAtrs.length - 1; x++) {
-          String value = "";
+          String value = ""; //O valor da coluna a ser adicionada na linha
           for (int y = 0; y <= atrs.length - 1; y++) {
-            if (defaultAtrs[x].equals(atrs[y])) {
+            if (defaultAtrs[x].equals(atrs[y])) { //Se o nome da coluna estiver na lista padrão
+              //Tenta pegar pegar uma String com o valor da coluna
+              //Se for null ou uma String vazia retorna "null"
               value = Default.defaultValue("null", response.getString(defaultAtrs[x]));
+
+              //Adiciona as colunas na linha
               row = Functions.addInArray(row, value);
             }
           }
         }
+        
+        //Adiciona as linhas na tabela
         table.addRow(row);
       }
 
