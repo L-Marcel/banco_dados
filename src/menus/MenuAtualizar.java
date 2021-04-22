@@ -184,7 +184,6 @@ public class MenuAtualizar {
       System.out.print("Informe o número do departamento: ");
       int numDep = Integer.parseInt(input.nextLine());
       Departamento departamento = DepartamentoDAO.selecionar(numDep);
-      DepartamentoDAO.atualizar(numDep, departamento);
 
       //Se esse valor for false volta para o menu de atualizar
       boolean continuar = true;
@@ -278,7 +277,6 @@ public class MenuAtualizar {
         String cpfEmpre = input.nextLine();
         System.out.print("Informe o nome do dependente: ");
         String nomeDep = input.nextLine();
-        System.out.print(nomeDep);
         Dependente dependente = DependenteDAO.selecionar(cpfEmpre, nomeDep);
         
         //Se esse valor for false volta para o menu de atualizar
@@ -306,7 +304,7 @@ public class MenuAtualizar {
               //Alteração confirmada
               DependenteDAO.atualizar(cpfEmpre, nomeDep, dependente);
               continuar = false;
-                break;
+              break;
             case 1:
               //Alteração recusada
               continuar = false;

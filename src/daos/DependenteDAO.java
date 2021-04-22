@@ -94,11 +94,11 @@ public class DependenteDAO {
     try {
       PreparedStatement statement = con.prepareStatement(sql);
 
-      statement.setString(1, dependente.getNome());
-      statement.setString(2, dependente.getCpfEmpregado());
-      statement.setDate(3, Date.valueOf(dependente.getDataNasc().toString()));
-      statement.setString(4, dependente.getSexo());
-      statement.setString(5, dependente.getParentesco());
+      statement.setString(1, newDependente.getNome());
+      statement.setString(2, newDependente.getCpfEmpregado());
+      statement.setDate(3, Date.valueOf(newDependente.getDataNasc().toString()));
+      statement.setString(4, newDependente.getSexo());
+      statement.setString(5, newDependente.getParentesco());
 
       statement.setString(6, cpfEmpregado);
 

@@ -99,9 +99,9 @@ public class DepartamentoDAO {
       statement.close();
       con.close();
       Departamento departamentoS = selecionar(newDepartamento.getNumero());
-
+System.out.println(departamentoS.toString("Atualizado"));
       System.out.println(departamento.toString("Antigo"));
-      System.out.println(departamentoS.toString("Atualizado"));
+      
 
       return departamento;
     } catch (Exception e) {
